@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const confirmar = document.getElementById("confirmarSenha");
   const statusMsg = document.getElementById("statusMsg");
 
-  const scriptURL = "https://script.google.com/macros/s/AKfycbze3_BmoQtEwRBH0wRM3JWfjq5oorsgKxd-cYXoS1-hBNKPwheAhdCCVTS4C0RU8-NJyA/exec";
+  // ✅ Sua nova URL do Apps Script
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzsdXWUIjprn04N2u1qD4eWMo4vCv4bBCFCW3u1q1cUZ92M2JCtWjEyWiyxfTkIJSHxDA/exec";
 
   // 🔤 Bloqueia números no campo nome
   nome.addEventListener("input", (e) => {
@@ -47,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
       let idade = hoje.getFullYear() - nascimento.getFullYear();
       const m = hoje.getMonth() - nascimento.getMonth();
       if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) idade--;
-
       if (idade < 10) {
         document.getElementById("dateError").textContent = "Você deve ter pelo menos 10 anos.";
         valido = false;
@@ -74,39 +74,31 @@ document.addEventListener("DOMContentLoaded", () => {
       valido = false;
     }
 
-    // 🚀 Se tudo estiver certo → Envia para Google Sheets
+    // 🚀 Se tudo estiver certo → Envia via FormData
     if (valido) {
       statusMsg.textContent = "📤 Enviando dados...";
       statusMsg.style.color = "orange";
 
+      const formData = new FormData();
+      formData.append("nome", nome.value);
+      formData.append("dataNascimento", date.value);
+      formData.append("email", email.value);
+      formData.append("senha", senha.value);
+
       try {
-        const response = await fetch(scriptURL, {
+        await fetch(scriptURL, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            nome: nome.value,
-            dataNascimento: date.value,
-            email: email.value,
-            senha: senha.value
-          })
+          body: formData // 👈 aqui é o segredo anti-CORS
         });
 
-        const result = await response.json();
-
-        if (result.status === "success") {
-          statusMsg.textContent = "✅ Cadastro enviado com sucesso!";
-          statusMsg.style.color = "green";
-          form.reset();
-        } else {
-          throw new Error("Erro no retorno do servidor.");
-        }
+        statusMsg.textContent = "✅ Dados enviados com sucesso!";
+        statusMsg.style.color = "green";
+        form.reset();
       } catch (err) {
-        statusMsg.textContent = "❌ Erro ao enviar dados. Tente novamente.";
+        statusMsg.textContent = "❌ Erro ao enviar dados.";
         statusMsg.style.color = "red";
         console.error(err);
       }
     }
   });
 });
-
-
