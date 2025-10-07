@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const confirmar = document.getElementById("confirmarSenha");
   const statusMsg = document.getElementById("statusMsg");
 
-  const scriptURL = "https://script.google.com/macros/s/AKfycbw9RlKtFMd7oNBQzeT2p7khWdpKhyT67V6oFQYAq7dC1TCf6amlXS5p02R3pwT0qDeFVg/exec";
+  const scriptURL = "https://script.google.com/macros/s/AKfycbxJ9sRq3YL0Dam1E7sElSDf_mrwiEPeLeWFGZtiXVESIcG59k9USA6WO9UYNZnM7NYixg/exec";
 
   // 🔤 Bloqueia números no campo nome
   nome.addEventListener("input", (e) => {
@@ -108,3 +108,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
